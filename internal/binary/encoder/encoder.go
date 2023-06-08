@@ -59,7 +59,7 @@ func resolve(vt *rt.GoType) (Encoder, error) {
     var val interface{}
 
     /* fast-path: type is cached */
-    if val = programCache.Get(vt); val != nil {
+    if val = programCache.GetWithRLock(vt); val != nil {
         atomic.AddUint64(&HitCount, 1)
         return val.(Encoder), nil
     }
@@ -97,7 +97,7 @@ func mkcompile(opts opts.Options) func(*rt.GoType) (interface{}, error) {
 }
 
 func Pretouch(vt *rt.GoType, opts opts.Options) error {
-    if programCache.Get(vt) != nil {
+    if programCache.GetWithRLock(vt) != nil {
         return nil
     } else if _, err := programCache.Compute(vt, mkcompile(opts)); err != nil {
         return err

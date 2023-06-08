@@ -58,7 +58,7 @@ func resolve(vt *rt.GoType) (Decoder, error) {
     var val interface{}
 
     /* fast-path: type is cached */
-    if val = programCache.Get(vt); val != nil {
+    if val = programCache.GetWithRLock(vt); val != nil {
         atomic.AddUint64(&HitCount, 1)
         return val.(Decoder), nil
     }
@@ -123,7 +123,7 @@ func Pretouch(vt *rt.GoType, opts opts.Options) (map[reflect.Type]struct{}, erro
     var ret map[reflect.Type]struct{}
 
     /* check for cached types */
-    if programCache.Get(vt) != nil {
+    if programCache.GetWithRLock(vt) != nil {
         return nil, nil
     }
 

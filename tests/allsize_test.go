@@ -22,15 +22,16 @@ import (
 	"math"
 	"math/rand"
 	"reflect"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"testing"
 	"time"
-	`unsafe`
+	"unsafe"
 
 	"github.com/apache/thrift/lib/go/thrift"
 	"github.com/cloudwego/frugal"
-	`github.com/cloudwego/frugal/internal/rt`
+	"github.com/cloudwego/frugal/internal/rt"
 	"github.com/cloudwego/frugal/testdata/kitex_gen/baseline"
 	"github.com/cloudwego/kitex/pkg/protocol/bthrift"
 	"github.com/stretchr/testify/assert"
@@ -81,8 +82,8 @@ var samples []Sample
 var (
 	bytesCount  = 16
 	stringCount = 16
-	listCount       = 8
-	mapCount        = 8
+	listCount   = 8
+	mapCount    = 8
 )
 
 func getSamples() []Sample {
@@ -399,7 +400,7 @@ func BenchmarkMarshalAllSize_Parallel_ThriftIterator(b *testing.B) {
 		b.Run(s.name, func(b *testing.B) {
 			defer func() {
 				if e := recover(); e != nil {
-					b.Fatal(e)
+					b.Fatalf("panic: err=%s, stack=%s", e, debug.Stack())
 				}
 			}()
 			b.SetBytes(int64(len(s.bytes)))

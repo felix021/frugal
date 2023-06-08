@@ -133,15 +133,21 @@ func (self *ProgramMap) insert(vt *rt.GoType, fn interface{}) {
 /** RCU Program Cache **/
 
 type ProgramCache struct {
-    m sync.Mutex
+    m sync.RWMutex
     p unsafe.Pointer
 }
 
 func CreateProgramCache() *ProgramCache {
     return &ProgramCache {
-        m: sync.Mutex{},
+        m: sync.RWMutex{},
         p: unsafe.Pointer(newProgramMap()),
     }
+}
+
+func (self *ProgramCache) GetWithRLock(vt *rt.GoType) interface{} {
+    self.m.RLock()
+    defer self.m.RUnlock()
+    return self.Get(vt)
 }
 
 func (self *ProgramCache) Get(vt *rt.GoType) interface{} {
