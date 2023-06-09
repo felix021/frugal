@@ -167,6 +167,8 @@ func (self *ProgramCache) Compute(vt *rt.GoType, compute func(*rt.GoType) (inter
     }
 
     /* update the RCU cache */
-    atomic.StorePointer(&self.p, unsafe.Pointer((*ProgramMap)(atomic.LoadPointer(&self.p)).add(vt, val)))
+	atomic.StorePointer(&self.p, unsafe.Pointer(
+        (*ProgramMap)(atomic.LoadPointer(&self.p)).copy().add(vt, val),
+    ))
     return val, nil
 }
