@@ -26,11 +26,11 @@ import (
 	"strings"
 	"testing"
 	"time"
-	`unsafe`
+	"unsafe"
 
 	"github.com/apache/thrift/lib/go/thrift"
 	"github.com/cloudwego/frugal"
-	`github.com/cloudwego/frugal/internal/rt`
+	"github.com/cloudwego/frugal/internal/rt"
 	"github.com/cloudwego/frugal/testdata/kitex_gen/baseline"
 	"github.com/cloudwego/kitex/pkg/protocol/bthrift"
 	"github.com/stretchr/testify/assert"
@@ -81,8 +81,8 @@ var samples []Sample
 var (
 	bytesCount  = 16
 	stringCount = 16
-	listCount       = 8
-	mapCount        = 8
+	listCount   = 8
+	mapCount    = 8
 )
 
 func getSamples() []Sample {
@@ -196,6 +196,10 @@ func BenchmarkMarshalAllSize_ApacheThrift(b *testing.B) {
 
 func BenchmarkMarshalAllSize_ThriftIterator(b *testing.B) {
 	for _, s := range getSamples() {
+		if s.name == "large" {
+			b.Log("skipping large due to bug of ThriftIterator")
+			continue
+		}
 		b.Run(s.name, func(b *testing.B) {
 			defer func() {
 				if e := recover(); e != nil {
@@ -396,6 +400,10 @@ func BenchmarkMarshalAllSize_Parallel_ApacheThrift(b *testing.B) {
 
 func BenchmarkMarshalAllSize_Parallel_ThriftIterator(b *testing.B) {
 	for _, s := range getSamples() {
+		if s.name == "large" {
+			b.Log("Skipping large sample due to bug of ThriftIterator")
+			continue
+		}
 		b.Run(s.name, func(b *testing.B) {
 			defer func() {
 				if e := recover(); e != nil {

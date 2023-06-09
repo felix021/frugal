@@ -3,7 +3,7 @@ module github.com/cloudwego/frugal/fuzz
 go 1.15
 
 require (
-	github.com/apache/thrift v0.18.0
+	github.com/apache/thrift v0.13.0
 	github.com/brianvoe/gofakeit/v6 v6.19.0
 	github.com/bytedance/gopkg v0.0.0-20220824043955-beb90005fda6
 	github.com/choleraehyq/pid v0.0.16 // indirect
