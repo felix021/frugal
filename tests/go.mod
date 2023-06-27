@@ -17,3 +17,5 @@ require (
 )
 
 replace github.com/cloudwego/frugal => ../
+
+replace github.com/choleraehyq/pid => github.com/felix021/pid v0.0.0-20230627033431-6a63b653a6cd
