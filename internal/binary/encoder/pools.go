@@ -29,7 +29,7 @@ var (
     compilerPool       sync.Pool
     basicBlockPool     sync.Pool
     graphBuilderPool   sync.Pool
-    runtimeStatePool   sync.Pool
+    // runtimeStatePool   sync.Pool
     optimizerStatePool sync.Pool
 )
 
@@ -108,15 +108,16 @@ func resetGraphBuilder(p *GraphBuilder) *GraphBuilder {
 }
 
 func newRuntimeState() *RuntimeState {
-    if v := runtimeStatePool.Get(); v != nil {
-        return v.(*RuntimeState)
-    } else {
-        return new(RuntimeState)
-    }
+    return new(RuntimeState)
+    // if v := runtimeStatePool.Get(); v != nil {
+    //     return v.(*RuntimeState)
+    // } else {
+    //     return new(RuntimeState)
+    // }
 }
 
 func freeRuntimeState(p *RuntimeState) {
-    runtimeStatePool.Put(p)
+    // runtimeStatePool.Put(p)
 }
 
 func newOptimizerState() *_OptimizerState {
